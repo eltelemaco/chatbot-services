@@ -1,4 +1,4 @@
-# Local dev convenience only (not used on Oracle VM if this file is absent).
+# Local dev convenience only (not used on remote VM if this file is absent).
 services:
   barber-backend:
     ports:
