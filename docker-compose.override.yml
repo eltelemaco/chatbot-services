@@ -1,0 +1,37 @@
+# Local dev convenience only (not used on Oracle VM if this file is absent).
+services:
+  barber-backend:
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./services/barber/backend/src:/app/services/barber/backend/src
+      - ./shared:/app/shared
+    command: node --watch services/barber/backend/src/index.js
+
+  barber-landing:
+    ports:
+      - "8080:80"
+    volumes:
+      - ./services/barber/landing/index.html:/usr/share/nginx/html/index.html
+      - ./services/barber/landing/favicon.ico:/usr/share/nginx/html/favicon.ico
+      - ./services/barber/landing/css:/usr/share/nginx/html/css
+      - ./services/barber/landing/js:/usr/share/nginx/html/js
+      - ./services/barber/landing/images:/usr/share/nginx/html/images
+
+  restaurant-backend:
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./services/restaurant/backend/src:/app/services/restaurant/backend/src
+      - ./shared:/app/shared
+    command: node --watch services/restaurant/backend/src/index.js
+
+  restaurant-landing:
+    ports:
+      - "8081:80"
+    volumes:
+      - ./services/restaurant/landing/index.html:/usr/share/nginx/html/index.html
+      - ./services/restaurant/landing/favicon.ico:/usr/share/nginx/html/favicon.ico
+      - ./services/restaurant/landing/css:/usr/share/nginx/html/css
+      - ./services/restaurant/landing/js:/usr/share/nginx/html/js
+      - ./services/restaurant/landing/images:/usr/share/nginx/html/images
