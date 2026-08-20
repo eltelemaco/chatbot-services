@@ -10,7 +10,6 @@ logs/
 # Secret-free template, meant to be committed and copied to .env by cloners
 !.env.example
 secrets.conf
-docker-compose.override.yml
 npm-debug.log*
 # Private deploy/ops tooling — intentionally excluded from this repo
 scripts/
