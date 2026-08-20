@@ -1,8 +1,10 @@
 # Corner Cuts Chatbots
 
-Multi-service appointment chatbots for a barber shop and a restaurant, built as npm workspaces.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Each service has its own backend (Express + SQLite/sql.js) and static landing page (nginx), all served through a shared Caddy reverse proxy.
+Two little appointment-booking chatbots — one for a barber shop, one for a restaurant — living side by side in the same npm workspaces monorepo. Each one has its own backend and its own landing page, but they share a common LLM/DB/logging layer so neither has to reinvent the other's wheels.
+
+Each service pairs an Express backend (SQLite via sql.js) with a static landing page (served by nginx), and both sit behind a shared Caddy reverse proxy.
 
 ## Monorepo layout
 
@@ -25,27 +27,30 @@ chatbot/
 │       └── landing/             # Static site on :80
 └── shared/                      # `@chatbot/shared` workspace
     ├── db/                      # SQLite helpers
-    ├── llm/                     # Hetzner/OpenAI-compatible LLM client
+    ├── llm/                     # OpenRouter/OpenAI-compatible LLM client
     └── logging/                 # Shared logging utilities
 ```
 
-## Prerequisites
+## Before you start
+
+You'll need:
 
 - Docker + Docker Compose
-- Node.js 18+ (only for local dev outside Docker)
-- `OPENROUTER_API_KEY` exported in your shell or set in `secrets.conf` (never committed)
-- Copy `secrets.example.conf` to `secrets.conf` and fill in both values:
+- Node.js 18+ (only if you want to run a backend outside Docker)
+- An `OPENROUTER_API_KEY` — either exported in your shell or dropped into `secrets.conf`
+
+Copy the secrets template and fill it in:
 
 ```bash
 cp secrets.example.conf secrets.conf
 # edit secrets.conf
 ```
 
-## Deployment config (`.env`)
+`secrets.conf` is gitignored, so nothing you put there ever gets committed.
 
-Domain names and the container registry namespace are read from a root `.env`
-file, which Compose loads automatically. Copy the template and fill in your own
-values — same pattern as `secrets.conf` above:
+## Pointing it at your own domains (`.env`)
+
+Domain names and the container registry namespace live in a root `.env` file, which Compose picks up automatically. Same idea as `secrets.conf` above — copy the template, fill in your own values:
 
 ```bash
 cp .env.example .env
@@ -54,31 +59,24 @@ cp .env.example .env
 
 | Variable | Controls |
 |----------|----------|
-| `BARBER_DOMAIN` | Public hostname for the barber service — used for its CORS allow-list (`ALLOWED_ORIGINS`), its Caddy site block, and the outbound `HTTP-Referer` header sent to the LLM provider |
+| `BARBER_DOMAIN` | Public hostname for the barber service — its CORS allow-list, its Caddy site block, and the `HTTP-Referer` header sent to the LLM provider |
 | `RESTAURANT_DOMAIN` | Same three things, for the restaurant service |
 | `DOCKERHUB_REPO` | Docker Hub namespace the four service images are built, pushed, and pulled under |
 
-Every reference has an `example.com`-style default baked into `docker-compose.yml`,
-so `docker compose config` and `docker compose up` work with no `.env` at all —
-`.env` is what you edit to point the stack at your own domains.
+Everything has a safe `example.com`-style default already baked into `docker-compose.yml`, so `docker compose config` and `docker compose up` both just work with zero setup — `.env` only matters once you want to point the stack at domains you actually own.
 
-One caveat if you run Caddy **outside** Compose: the Caddyfile uses Caddy's
-`{$BARBER_DOMAIN}` / `{$RESTAURANT_DOMAIN}` placeholder syntax, which has no
-default-value fallback like Compose's `${VAR:-default}`. If those variables are
-unset in Caddy's environment, the site addresses resolve to empty strings and
-Caddy refuses to start. Running via `docker compose up` avoids this — the Compose
-file supplies the defaults.
+One gotcha if you ever run Caddy **outside** Compose: the Caddyfile uses Caddy's `{$BARBER_DOMAIN}` / `{$RESTAURANT_DOMAIN}` placeholders, which — unlike Compose's `${VAR:-default}` — have no built-in fallback. Leave those unset and Caddy will refuse to start. Running through `docker compose up` sidesteps this entirely, since Compose supplies the defaults itself.
 
 ## Required secrets
 
-`secrets.conf` in the repo root must contain:
+`secrets.conf` in the repo root needs:
 
 | Variable | Purpose |
 |----------|---------|
 | `OPENROUTER_API_KEY` | OpenRouter API access |
 | `ADMIN_KEY` | Admin endpoints such as `/api/appointments` debug listing |
 
-## Run locally (Docker Compose)
+## Running it locally (Docker Compose)
 
 From the repo root:
 
@@ -91,7 +89,7 @@ docker compose up --build
 - Restaurant UI: http://localhost:8081
 - Restaurant API health: http://localhost:3002/api/health
 
-Compose picks up `docker-compose.override.yml` automatically, mapping ports locally while keeping production services `expose`-only.
+Compose picks up `docker-compose.override.yml` automatically, so you get local port mappings for free while the production config stays `expose`-only.
 
 ## Local dev without Docker
 
@@ -110,38 +108,24 @@ OPENROUTER_API_KEY=... npm run dev
 # and services/restaurant/landing/index.html
 ```
 
-Root-level shortcuts:
+Or use the root-level shortcuts:
 
 ```bash
 npm run dev:barber     # workspace dev for barber backend
 npm run dev:restaurant # workspace dev for restaurant backend
 ```
 
-## Deploy to production
+## Deploying this yourself
 
-The deploy and ops automation under `scripts/` is maintainer-private and is
-intentionally **not** part of this repo — it's tied to one specific host, SSH key,
-log-shipping pipeline, and alerting setup, none of which would transfer to anyone
-else's infrastructure. It's excluded via an explicit `scripts/` entry in
-`.gitignore`.
+Heads up: the deploy/ops automation that lives under `scripts/` on the maintainer's machine isn't part of this repo. It's wired to one specific host, SSH key, log-shipping pipeline, and alerting setup — none of which would do you any good, so it's excluded via `.gitignore` rather than shipped and left to rot.
 
-If you're adapting this project, build your own deploy process for your own
-target. Everything it needs is already in the repo: `docker-compose.yml` defines
-the four services plus Caddy, `.env` supplies the domains and registry namespace,
-and `secrets.conf` supplies the runtime secrets. A minimal deploy is "get the
-repo, `.env`, and `secrets.conf` onto the host, then `docker compose up -d`" —
-whether you drive that with rsync and SSH, a CI pipeline, or an image pull from
-your `DOCKERHUB_REPO` namespace is up to you.
+If you're taking this further, you'll want your own deploy process for your own target — but everything it needs is already here: `docker-compose.yml` defines the four services plus Caddy, `.env` supplies your domains and registry namespace, and `secrets.conf` supplies the runtime secrets. At its simplest, a deploy is just "get the repo, `.env`, and `secrets.conf` onto the host, then `docker compose up -d`" — whether you get there via rsync and SSH, a CI pipeline, or pulling images from your own `DOCKERHUB_REPO` namespace is entirely up to you.
 
-Two things worth handling in whatever you build: create the bind-mounted log
-directories (`logs/caddy/`, `logs/barber-backend/`, `logs/restaurant-backend/`)
-before the first `up`, and deploy services selectively (`docker compose up -d
-restaurant-backend restaurant-landing`) so rolling out one service doesn't
-recreate the other's containers.
+Two things worth remembering when you build that out: create the bind-mounted log directories (`logs/caddy/`, `logs/barber-backend/`, `logs/restaurant-backend/`) before the first `up`, and deploy services selectively (e.g. `docker compose up -d restaurant-backend restaurant-landing`) so rolling out one doesn't unnecessarily recreate the other.
 
 ## Service names
 
-Compose service names are domain-prefixed to avoid collisions:
+Compose service names are domain-prefixed so they don't collide:
 
 | Service | Compose name | Build context |
 |---------|--------------|---------------|
@@ -151,7 +135,7 @@ Compose service names are domain-prefixed to avoid collisions:
 | Restaurant landing | `restaurant-landing` | `services/restaurant/landing` |
 | Reverse proxy | `caddy` | public `caddy:2-alpine` image |
 
-## Common operational tasks
+## Handy day-to-day commands
 
 ```bash
 # Tail barber backend logs
@@ -179,13 +163,12 @@ docker compose up -d --no-deps caddy
 | `SERVICE_NAME` | `barber` / `restaurant` | Used by shared code and labels |
 | `APP_LOG_PATH` | `/app/logs/app.log` | Bind-mounted log directory |
 
-`BARBER_DOMAIN`, `RESTAURANT_DOMAIN`, and `DOCKERHUB_REPO` are set in `.env`
-rather than per-container — see [Deployment config](#deployment-config-env).
+`BARBER_DOMAIN`, `RESTAURANT_DOMAIN`, and `DOCKERHUB_REPO` live in `.env` rather than per-container — see [Pointing it at your own domains](#pointing-it-at-your-own-domains-env).
 
-## Notes
+## A few things worth knowing
 
-- Persistence uses SQLite via **sql.js** (pure JS/WASM — no native build).
-- Backends use OpenAI-style **tool calling** for availability/booking; each enforces its own business rules and prevents double-booking.
-- `shared/` is an npm workspace package (`@chatbot/shared`) consumed by both backends.
-- Logs are bind-mounted under `./logs/<service>/`; shipping them off-host is left to your own tooling.
-- Caddy access logs are written to `./logs/caddy/` with sensitive headers stripped.
+- Persistence uses SQLite via **sql.js** — pure JS/WASM, so there's no native build step to fight with.
+- Both backends use OpenAI-style **tool calling** for availability and booking, and each enforces its own business rules to keep double-bookings from ever happening — the model proposes, the backend disposes.
+- `shared/` is a proper npm workspace package (`@chatbot/shared`), so both services draw from the same LLM client, DB helpers, and logging instead of copy-pasting them.
+- Logs are bind-mounted under `./logs/<service>/`; shipping them somewhere off-host is left to your own tooling.
+- Caddy's access logs land in `./logs/caddy/`, with sensitive headers stripped before they're written.
