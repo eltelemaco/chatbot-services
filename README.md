@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Two little appointment-booking chatbots, one for a barber shop and one for a restaurant, living side by side in the same npm workspaces monorepo. Each one has its own backend and its own landing page, but they share a common LLM/DB/logging layer so neither has to reinvent the other's wheels.
+Two little appointment booking chatbots, one for a barber shop and one for a restaurant, living side by side in the same npm workspaces monorepo. Each one has its own backend and its own landing page, but they share a common LLM/DB/logging layer so neither has to reinvent the other's wheels.
 
 Each service pairs an Express backend (SQLite via sql.js) with a static landing page (served by nginx), and both sit behind a shared Caddy reverse proxy.
 
