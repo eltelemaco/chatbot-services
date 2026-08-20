@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mesa Norte — cocina mexicana contemporánea en Guadalajara. Reserva mesa por chat."
+    />
+    <title>Mesa Norte — Cocina mexicana contemporánea</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css?v=__BUILD_VERSION__" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top">
+        <span class="brand-mark">MN</span>
+        <span class="brand-text">
+          Mesa Norte
+          <small>Guadalajara</small>
+        </span>
+      </a>
+      <button
+        class="nav-toggle"
+        id="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label="Abrir menú"
+      >
+        <span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Principal">
+        <a href="#menu">Carta</a>
+        <a href="#casa">La casa</a>
+        <a href="#gallery">Cocina</a>
+        <a href="#location">Ubicación</a>
+        <button class="btn btn-sm book-cta" type="button">Reservar mesa</button>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <picture>
+          <source type="image/webp" srcset="/images/hero.webp" />
+          <img
+            class="hero-photo"
+            src="/images/hero.jpg"
+            alt="Sala de Mesa Norte, mesas puestas a la luz de las velas"
+            width="1280"
+            height="720"
+            fetchpriority="high"
+          />
+        </picture>
+        <div class="hero-veil"></div>
+        <div class="hero-content">
+          <p class="eyebrow">Cocina mexicana contemporánea</p>
+          <h1>La mesa está lista.</h1>
+          <p class="lede">
+            Temporada, fuego y mesa larga en Av. México. Reserva por chat —
+            sin llamadas, sin lista de espera en voz alta.
+          </p>
+          <div class="hero-actions">
+            <button class="btn book-cta" type="button">Reservar por chat</button>
+            <a class="btn btn-ghost" href="#menu">Ver la carta</a>
+          </div>
+          <p class="hero-meta">Mar–Dom · 12:00–22:00 · 6 mesas</p>
+        </div>
+      </section>
+
+      <section class="strip">
+        <div class="container strip-row">
+          <p>
+            <span>Chef</span>
+            María
+          </p>
+          <p>
+            <span>Cocina</span>
+            Temporada &amp; parrilla
+          </p>
+          <p>
+            <span>Mesas</span>
+            2 a 8 comensales
+          </p>
+          <p>
+            <span>Reserva</span>
+            Chat, 90 min
+          </p>
+        </div>
+      </section>
+
+      <section class="section menu" id="menu">
+        <div class="container">
+          <header class="section-head center">
+            <p class="eyebrow ink">La carta</p>
+            <h2>Lo que sale de la cocina</h2>
+            <p class="section-sub">
+              Precios de referencia. El chat te da disponibilidad y puede
+              tomar la reserva al momento.
+            </p>
+          </header>
+
+          <div class="menu-sheet">
+            <div class="menu-col">
+              <h3>Entradas</h3>
+              <ul class="menu-list">
+                <li>
+                  <div>
+                    <strong>Ceviche del día</strong>
+                    <span>Pescado fresco, limón y aguacate</span>
+                  </div>
+                  <em>$180</em>
+                </li>
+                <li>
+                  <div>
+                    <strong>Guacamole de la casa</strong>
+                    <span>Con totopos</span>
+                  </div>
+                  <em>$110</em>
+                </li>
+              </ul>
+
+              <h3>Platos</h3>
+              <ul class="menu-list">
+                <li>
+                  <div>
+                    <strong>Tacos al pastor</strong>
+                    <span>Trompo, piña y cilantro</span>
+                  </div>
+                  <em>$95</em>
+                </li>
+                <li>
+                  <div>
+                    <strong>Enchiladas suizas</strong>
+                    <span>Pollo, salsa verde y gratinado</span>
+                  </div>
+                  <em>$145</em>
+                </li>
+                <li>
+                  <div>
+                    <strong>Ribeye a la parrilla</strong>
+                    <span>300 g, guarnición del día</span>
+                  </div>
+                  <em>$420</em>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu-col">
+              <h3>Postres</h3>
+              <ul class="menu-list">
+                <li>
+                  <div>
+                    <strong>Flan napolitano</strong>
+                    <span>Casero</span>
+                  </div>
+                  <em>$85</em>
+                </li>
+              </ul>
+
+              <h3>Bebidas</h3>
+              <ul class="menu-list">
+                <li>
+                  <div>
+                    <strong>Agua de horchata</strong>
+                    <span>1 L</span>
+                  </div>
+                  <em>$55</em>
+                </li>
+                <li>
+                  <div>
+                    <strong>Margarita clásica</strong>
+                    <span>Tequila, limón, sal</span>
+                  </div>
+                  <em>$130</em>
+                </li>
+              </ul>
+
+              <aside class="menu-note">
+                <p>
+                  Pregunta al chat por mesas de 2, 4, 6 u 8. Lunes cerrado.
+                </p>
+                <button class="btn book-cta" type="button">Reservar mesa</button>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section casa" id="casa">
+        <div class="container casa-grid">
+          <figure class="casa-photo">
+            <picture>
+              <source type="image/webp" srcset="/images/about.webp" />
+              <img
+                src="/images/about.jpg"
+                alt="La chef María emplatando en la cocina de Mesa Norte"
+                width="1200"
+                height="800"
+                loading="lazy"
+              />
+            </picture>
+          </figure>
+          <div class="casa-copy">
+            <p class="eyebrow">La casa</p>
+            <h2>Fuego, barro y una sola sala.</h2>
+            <p>
+              Mesa Norte es un comedor chico en Av. México: seis mesas, cocina
+              a la vista y una barra de mezcal. La chef María cocina temporada
+              — pastor, ceviche, parrilla — para que la reserva sea la parte
+              fácil.
+            </p>
+            <p>
+              Walk-in si hay lugar. Si no, abre el chat, di cuántos son y a
+              qué hora quieren sentarse.
+            </p>
+            <blockquote>
+              “La mesa se reserva en un mensaje. El resto es comer.”
+              <cite>— María, chef</cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section class="section gallery" id="gallery">
+        <div class="container">
+          <header class="section-head">
+            <p class="eyebrow">Cocina y sala</p>
+            <h2>Lo que vas a ver en la mesa</h2>
+          </header>
+          <div class="gallery-grid">
+            <figure class="gallery-item tall">
+              <picture>
+                <source type="image/webp" srcset="/images/gallery-1.webp" />
+                <img src="/images/gallery-1.jpg" alt="Tacos al pastor" width="800" height="1067" loading="lazy" />
+              </picture>
+              <figcaption>Tacos al pastor</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <picture>
+                <source type="image/webp" srcset="/images/gallery-2.webp" />
+                <img src="/images/gallery-2.jpg" alt="Ceviche del día" width="800" height="600" loading="lazy" />
+              </picture>
+              <figcaption>Ceviche del día</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <picture>
+                <source type="image/webp" srcset="/images/gallery-3.webp" />
+                <img src="/images/gallery-3.jpg" alt="Ribeye a la parrilla" width="800" height="600" loading="lazy" />
+              </picture>
+              <figcaption>Ribeye a la parrilla</figcaption>
+            </figure>
+            <figure class="gallery-item wide">
+              <picture>
+                <source type="image/webp" srcset="/images/gallery-4.webp" />
+                <img src="/images/gallery-4.jpg" alt="Barra de mezcal" width="1200" height="675" loading="lazy" />
+              </picture>
+              <figcaption>Barra de mezcal</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <picture>
+                <source type="image/webp" srcset="/images/gallery-5.webp" />
+                <img src="/images/gallery-5.jpg" alt="Enchiladas suizas" width="800" height="600" loading="lazy" />
+              </picture>
+              <figcaption>Enchiladas suizas</figcaption>
+            </figure>
+            <figure class="gallery-item">
+              <picture>
+                <source type="image/webp" srcset="/images/gallery-6.webp" />
+                <img src="/images/gallery-6.jpg" alt="Cena en la sala" width="800" height="600" loading="lazy" />
+              </picture>
+              <figcaption>Cena en la sala</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section location" id="location">
+        <div class="container location-grid">
+          <div class="location-copy">
+            <p class="eyebrow">Ubicación y horarios</p>
+            <h2>Av. México 1200</h2>
+            <address>
+              <strong>Mesa Norte</strong><br />
+              Av. México 1200<br />
+              Guadalajara, Jalisco, México
+            </address>
+            <p><a href="tel:+523355501930">(33) 5550 1930</a></p>
+            <dl class="hours">
+              <div>
+                <dt>Mar–Dom</dt>
+                <dd>12:00 – 22:00</dd>
+              </div>
+              <div>
+                <dt>Lunes</dt>
+                <dd>Cerrado</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="map-wrap">
+            <iframe
+              class="map-frame"
+              title="Mapa de Mesa Norte en Guadalajara"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=-103.390%2C20.665%2C-103.360%2C20.685&amp;layer=mapnik&amp;marker=20.675%2C-103.375"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              sandbox="allow-scripts allow-same-origin allow-popups"
+              allowfullscreen
+            ></iframe>
+            <a
+              class="map-open-link"
+              href="https://www.openstreetmap.org/?mlat=20.675&amp;mlon=-103.375#map=16/20.675/-103.375"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Ver en OpenStreetMap</a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="section contact" id="contact">
+        <div class="container contact-panel">
+          <div>
+            <p class="eyebrow">Recepción</p>
+            <h2>Reserva en el chat</h2>
+            <p>
+              La vía más rápida es el widget. Teléfono y correo para grupos o
+              dudas.
+            </p>
+            <ul class="contact-list">
+              <li>
+                <span>Teléfono</span>
+                <a href="tel:+523355501930">(33) 5550 1930</a>
+              </li>
+              <li>
+                <span>Correo</span>
+                <a href="mailto:hola@mesanorte.example.com">hola@mesanorte.example.com</a>
+              </li>
+              <li>
+                <span>Web</span>
+                <a href="https://www.mesanorte.example.com" target="_blank" rel="noopener noreferrer"
+                  >www.mesanorte.example.com</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="contact-cta-block">
+            <p>¿Para cuántos y qué día?</p>
+            <button class="btn book-cta" type="button">Abrir chat de reserva</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <p class="footer-brand">Mesa Norte · Guadalajara</p>
+        <p class="footer-copy">
+          © <span id="year">2026</span> Demo POC · No es un negocio real
+        </p>
+        <div class="footer-social">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+            >Instagram</a
+          >
+          <a
+            href="https://www.openstreetmap.org/?mlat=20.675&amp;mlon=-103.375#map=17/20.675/-103.375"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Mapas</a
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/widget.js?v=__BUILD_VERSION__"></script>
+    <script>
+      (function () {
+        var year = document.getElementById("year");
+        if (year) year.textContent = String(new Date().getFullYear());
+
+        if (typeof Widget === "undefined" || !Widget.init) {
+          console.error("No se pudo cargar el widget de chat");
+          return;
+        }
+
+        Widget.init({
+          apiEndpoint: "/api/chat",
+          brandName: "Mesa Norte",
+          welcomeMessage:
+            "¡Bienvenido a Mesa Norte! Soy la recepción virtual. Puedo reservar mesa o contarte del menú. ¿Para cuántas personas y qué día te acomoda?",
+        });
+
+        document.querySelectorAll(".book-cta").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            Widget.open();
+          });
+        });
+
+        var toggle = document.getElementById("nav-toggle");
+        var nav = document.getElementById("site-nav");
+        if (toggle && nav) {
+          toggle.addEventListener("click", function () {
+            var open = nav.classList.toggle("is-open");
+            toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            toggle.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+          });
+          nav.querySelectorAll("a").forEach(function (link) {
+            link.addEventListener("click", function () {
+              nav.classList.remove("is-open");
+              toggle.setAttribute("aria-expanded", "false");
+              toggle.setAttribute("aria-label", "Abrir menú");
+            });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+data/
+logs/
+node_modules/
+secrets.conf
+.env
+*.db
+npm-debug.log
+.git

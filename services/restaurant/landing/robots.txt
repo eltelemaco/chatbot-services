@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://restaurant.example.com/sitemap.xml

@@ -1,0 +1,51 @@
+{$BARBER_DOMAIN} {
+	log {
+		output file /var/log/caddy/barber-access.log {
+			mode 644
+			roll_size 10mb
+			roll_keep 5
+			roll_keep_for 168h
+		}
+		format filter {
+			wrap json
+			fields {
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+				request>headers>X-Admin-Key delete
+				resp_headers>Set-Cookie delete
+			}
+		}
+	}
+	handle /api/* {
+		reverse_proxy barber-backend:3001
+	}
+	handle {
+		reverse_proxy barber-landing:80
+	}
+}
+
+{$RESTAURANT_DOMAIN} {
+	log {
+		output file /var/log/caddy/restaurant-access.log {
+			mode 644
+			roll_size 10mb
+			roll_keep 5
+			roll_keep_for 168h
+		}
+		format filter {
+			wrap json
+			fields {
+				request>headers>Cookie delete
+				request>headers>Authorization delete
+				request>headers>X-Admin-Key delete
+				resp_headers>Set-Cookie delete
+			}
+		}
+	}
+	handle /api/* {
+		reverse_proxy restaurant-backend:3002
+	}
+	handle {
+		reverse_proxy restaurant-landing:80
+	}
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@chatbot/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    "./db": "./db/index.js",
+    "./logging": "./logging/index.js",
+    "./llm/client": "./llm/client.js",
+    "./notify/n8nWebhook": "./notify/n8nWebhook.js"
+  },
+  "dependencies": {
+    "openai": "^4.86.2",
+    "sql.js": "^1.12.0"
+  }
+}

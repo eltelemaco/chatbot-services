@@ -1,0 +1,19 @@
+{
+  "name": "restaurant-chatbot-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@chatbot/shared": "file:../../shared",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
+    "openai": "^4.86.2",
+    "sql.js": "^1.12.0",
+    "uuid": "^11.1.0"
+  }
+}

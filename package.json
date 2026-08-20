@@ -1,0 +1,14 @@
+{
+  "name": "chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "services/*/*",
+    "shared"
+  ],
+  "scripts": {
+    "dev:barber": "npm run dev --workspace=services/barber/backend",
+    "dev:restaurant": "npm run dev --workspace=services/restaurant/backend"
+  }
+}

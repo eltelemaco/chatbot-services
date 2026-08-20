@@ -1,0 +1,260 @@
+openapi: 3.0.3
+info:
+  title: Corner Cuts Chatbots API
+  description: >
+    Chat + booking API shared by the barber (Corner Cutters) and restaurant
+    (Mesa Norte) services. Both are separate deployments of the same route
+    shape — pick the matching server below. `/api/appointments` exists only
+    on the barber deployment, `/api/reservations` only on the restaurant one.
+  version: "1.0.0"
+servers:
+  - url: https://barber.example.com
+    description: Barber (Corner Cutters) — production
+  - url: https://restaurant.example.com
+    description: Restaurant (Mesa Norte) — production
+  - url: http://localhost:3001
+    description: Barber — local dev
+  - url: http://localhost:3002
+    description: Restaurant — local dev
+tags:
+  - name: chat
+    description: Shared by both services
+  - name: barber
+    description: Barber-only endpoints
+  - name: restaurant
+    description: Restaurant-only endpoints
+paths:
+  /api/chat:
+    post:
+      tags: [chat]
+      summary: Send a chat message
+      description: >
+        No authentication — public endpoint the landing-page widget calls
+        directly. Rate-limited to 10 requests/minute per IP.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+                  maxLength: 500
+                  description: User message, max 500 characters.
+                  example: "Hola, ¿siguen abiertos?"
+                sessionId:
+                  type: string
+                  format: uuid
+                  description: >
+                    Omit on the first message; the server mints one and
+                    returns it. Pass it back on subsequent turns to keep
+                    conversation history.
+      responses:
+        "200":
+          description: Assistant reply
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                  sessionId:
+                    type: string
+                    format: uuid
+        "400":
+          description: Missing or oversized message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "429":
+          description: Rate limit exceeded (10 req/min per IP)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "502":
+          description: Upstream LLM call failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorDetail"
+        "503":
+          description: Server missing its LLM API key
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/health:
+    get:
+      tags: [chat]
+      summary: Health check
+      description: >
+        Bare request returns minimal status. Pass `X-Admin-Key` to also get
+        the active model name and whether the API key is configured.
+      parameters:
+        - name: X-Admin-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Optional admin key to unlock detailed fields.
+      responses:
+        "200":
+          description: Service status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  service:
+                    type: string
+                    example: barber-chatbot-backend
+                  model:
+                    type: string
+                    description: Only present with a valid X-Admin-Key.
+                  hasApiKey:
+                    type: boolean
+                    description: Only present with a valid X-Admin-Key.
+
+  /api/appointments:
+    get:
+      tags: [barber]
+      summary: List appointments (barber only)
+      description: >
+        Pass `phone` to look up a specific customer's appointments (no
+        auth needed for this path). Omit it and pass `X-Admin-Key` instead
+        to list every booked appointment.
+      parameters:
+        - name: phone
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Customer phone number. If present, X-Admin-Key is not required.
+        - name: X-Admin-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Required if `phone` is omitted.
+      responses:
+        "200":
+          description: Appointment list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  appointments:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Appointment"
+        "401":
+          description: Missing/invalid X-Admin-Key and no phone provided
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/reservations:
+    get:
+      tags: [restaurant]
+      summary: List reservations (restaurant only)
+      description: >
+        Pass `phone` to look up a specific customer's reservations (no
+        auth needed for this path). Omit it and pass `X-Admin-Key` instead
+        to list every booked reservation.
+      parameters:
+        - name: phone
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Customer phone number. If present, X-Admin-Key is not required.
+        - name: X-Admin-Key
+          in: header
+          required: false
+          schema:
+            type: string
+          description: Required if `phone` is omitted.
+      responses:
+        "200":
+          description: Reservation list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  reservations:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Reservation"
+        "401":
+          description: Missing/invalid X-Admin-Key and no phone provided
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    ErrorDetail:
+      type: object
+      properties:
+        error:
+          type: string
+        detail:
+          type: string
+    Appointment:
+      type: object
+      properties:
+        id:
+          type: string
+        customer_name:
+          type: string
+        phone:
+          type: string
+        service_id:
+          type: string
+          enum: [haircut, beard, cut_beard]
+        starts_at:
+          type: string
+        ends_at:
+          type: string
+        status:
+          type: string
+          example: booked
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: string
+        customer_name:
+          type: string
+        phone:
+          type: string
+        party_size:
+          type: integer
+        starts_at:
+          type: string
+        ends_at:
+          type: string
+        status:
+          type: string
+          example: booked
