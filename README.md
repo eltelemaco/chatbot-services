@@ -115,14 +115,6 @@ npm run dev:barber     # workspace dev for barber backend
 npm run dev:restaurant # workspace dev for restaurant backend
 ```
 
-## Deploying this yourself
-
-Heads up: the deploy/ops automation that lives under `scripts/` on the maintainer's machine isn't part of this repo. It's wired to one specific host, SSH key, log-shipping pipeline, and alerting setup, none of which would do you any good, so it's excluded via `.gitignore` rather than shipped and left to rot.
-
-If you're taking this further, you'll want your own deploy process for your own target, but everything it needs is already here: `docker-compose.yml` defines the four services plus Caddy, `.env` supplies your domains and registry namespace, and `secrets.conf` supplies the runtime secrets. At its simplest, a deploy is just "get the repo, `.env`, and `secrets.conf` onto the host, then `docker compose up -d`", whether you get there via rsync and SSH, a CI pipeline, or pulling images from your own `DOCKERHUB_REPO` namespace is entirely up to you.
-
-Two things worth remembering when you build that out: create the bind-mounted log directories (`logs/caddy/`, `logs/barber-backend/`, `logs/restaurant-backend/`) before the first `up`, and deploy services selectively (e.g. `docker compose up -d restaurant-backend restaurant-landing`) so rolling out one doesn't unnecessarily recreate the other.
-
 ## Service names
 
 Compose service names are domain-prefixed so they don't collide:
